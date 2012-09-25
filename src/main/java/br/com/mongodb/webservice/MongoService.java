@@ -23,18 +23,14 @@ public class MongoService extends HttpServlet{
 	
 	private static final long serialVersionUID = -8308487562730612088L;
 	
+	
+	@Autowired
 	MongoOperations mongoOperations;
 	
 
 	@WebMethod(operationName="create")
 	public String create(){
-		ConfigurableApplicationContext context = null;
-        context = new ClassPathXmlApplicationContext("META-INF/spring/bootstrap.xml");
-        System.out.println("context: "+context);
-        mongoOperations = context.getBean(MongoOperations.class);
-		
-		System.out.println("Mongo foi injetado? "+ mongoOperations);
-
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 		if (mongoOperations.collectionExists(Person.class)) {
 			mongoOperations.dropCollection(Person.class);
 		}
